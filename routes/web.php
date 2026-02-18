@@ -7,5 +7,3 @@ use App\Http\Controllers\Api\ScrumbanController;
 
 Route::get('/dashboard/summary', [DashboardController::class, 'index'])->name('dashboard.summary');
 Route::get('/scrumban/dashboard-summary', [ScrumbanController::class, 'getSummary']);
-
-
