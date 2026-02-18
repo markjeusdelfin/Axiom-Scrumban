@@ -21,6 +21,7 @@ class ScrumbanController extends Controller
                     return [
                         'id' => $user->id,
                         'name' => $user->name,
+                        'task_count' => $user->task_count,
                         'load' => min(100, ($user->task_count / 5) * 100)
                     ];
                 });
