@@ -150,7 +150,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         const AxiomDB = {
-            apiUrl: '/scrumban/dashboard-summary',
+            apiUrl: 'http://localhost:8000/scrumban/dashboard-summary',
 
             async fetchSummary() {
                 try {
@@ -164,17 +164,12 @@
                         credentials: 'same-origin'
                     });
 
-                    console.log('API Response Status:', response.status);
-                    console.log('API Response Headers:', response.headers);
-
                     if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error(`HTTP Error ${response.status}:`, errorText);
+                        console.error(`HTTP Error ${response.status}`);
                         return null;
                     }
 
                     const data = await response.json();
-                    console.log('API Response Data:', data);
 
                     if (!data.success) {
                         console.error("API Error:", data.error);
@@ -183,8 +178,7 @@
 
                     return data;
                 } catch (error) {
-                    console.error("Connection Error:", error);
-                    console.error("Error stack:", error.stack);
+                    console.error("Connection Error:", error.message);
                     return null;
                 }
             }
@@ -283,18 +277,13 @@
                 renderUsers(team);
             } else {
                 updateStatus(false);
-                const errorToast = document.getElementById('error-toast');
-                const errorMsg = document.getElementById('error-message');
-                errorMsg.innerText = 'Connection Failed: Check Logger or API endpoint';
-                errorToast.style.display = 'block';
+                document.getElementById('error-toast').style.display = 'block';
 
                 // Set default values on error
                 document.getElementById('statCapacity').innerText = '0';
                 document.getElementById('statLate').innerText = '0';
                 document.getElementById('capacityBar').style.width = '0%';
-                document.getElementById('employeeList').innerHTML = '<p class="text-slate-500">Unable to connect to database - Check browser console for details</p>';
-                
-                console.warn('Dashboard sync failed. Open browser DevTools (F12) to see detailed error logs');
+                document.getElementById('employeeList').innerHTML = '<p class="text-slate-500">Unable to connect to database</p>';
             }
 
             loader.style.opacity = '0';
