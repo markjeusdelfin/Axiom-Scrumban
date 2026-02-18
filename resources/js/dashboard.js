@@ -172,7 +172,10 @@ function renderWorkload(team) {
                         <p class="text-xs text-slate-500">${u.task_count || 0} tasks</p>
                     </div>
                 </div>
-                <span class="text-lg font-bold ${u.load >= 90 ? 'text-red-600' : u.load >= 75 ? 'text-amber-600' : 'text-green-600'}">${Math.round(u.load)}%</span>
+                <div class="flex flex-col items-end gap-1">
+                    <span class="text-lg font-bold ${u.load >= 90 ? 'text-red-600' : u.load >= 75 ? 'text-amber-600' : 'text-green-600'}">${Math.round(u.load)}%</span>
+                    ${u.load >= 90 ? '<span class="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 rounded">🚨 Overloaded</span>' : u.load >= 75 ? '<span class="text-xs font-bold text-amber-600 bg-amber-100 px-2 py-1 rounded">⚠️ High Load</span>' : ''}
+                </div>
             </div>
             <div class="workload-indicator">
                 <div class="workload-bar ${getWorkloadClass(u.load)}" style="width: ${u.load}%"></div>
