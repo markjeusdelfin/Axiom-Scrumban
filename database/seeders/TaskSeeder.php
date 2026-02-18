@@ -13,7 +13,7 @@ class TaskSeeder extends Seeder
     public function run(): void
     {
         $orgId = Str::uuid();
-        
+
         // Get the current active sprint
         $sprint = Sprints::where('status', 'active')->first();
         if (!$sprint) {
