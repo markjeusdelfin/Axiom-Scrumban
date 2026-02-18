@@ -237,16 +237,15 @@ async function syncWithPostgres() {
         const overloaded = team.filter(m => m.load >= 90);
         console.log('[Dashboard] Found', overloaded.length, 'overloaded team members');
         
-        if (overloaded.length > 0) {
+        const bottleneckAlert = document.getElementById('bottleneckAlert');
+        
+        if (overloaded.length > 0 && filterState.showBottlenecks) {
             const names = overloaded.map(m => m.name).join(', ');
             const message = `${names} ${overloaded.length === 1 ? 'is' : 'are'} overwhelmed with tasks (${overloaded.map(m => m.task_count || 0).join(', ')} tasks each). Consider redistributing work.`;
             document.getElementById('bottleneckMessage').innerText = message;
-            
-            if (filterState.showBottlenecks || overloaded.length > 0) {
-                document.getElementById('bottleneckAlert').classList.remove('hidden');
-            }
+            bottleneckAlert.classList.remove('hidden');
         } else {
-            document.getElementById('bottleneckAlert').classList.add('hidden');
+            bottleneckAlert.classList.add('hidden');
         }
 
         // Update charts with proper validation
