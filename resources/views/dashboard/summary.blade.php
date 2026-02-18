@@ -41,14 +41,6 @@
                 </button>
             </div>
 
-            <!-- Status Indicator -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200">
-                <span id="status-indicator" class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                <span id="status-text" class="text-xs font-bold text-blue-600 uppercase tracking-widest">Checking Database...</span>
-                <span class="text-xs text-blue-600 ml-2">PostgreSQL: axiom_scrumban</span>
-            </div>
-        </header>
-
         <!-- Key Metrics -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div class="metric-card">

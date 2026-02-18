@@ -96,18 +96,6 @@ let filterState = {
     showBottlenecks: false
 };
 
-function updateStatus(connected) {
-    const indicator = document.getElementById('status-indicator');
-    const text = document.getElementById('status-text');
-    if (connected) {
-        indicator.className = "w-2 h-2 rounded-full bg-green-500";
-        text.innerText = "Connected to Database";
-    } else {
-        indicator.className = "w-2 h-2 rounded-full bg-red-500";
-        text.innerText = "Database Offline";
-    }
-}
-
 function initCharts() {
     const common = {
         chart: {
@@ -199,7 +187,6 @@ async function syncWithPostgres() {
         }
 
         console.log('[Dashboard] Data sync successful, updating UI...');
-        updateStatus(true);
         
         // Safely extract and validate data
         const team = Array.isArray(response.team) ? response.team : [];
@@ -269,9 +256,7 @@ async function syncWithPostgres() {
         
     } catch (error) {
         console.error('[Dashboard] Sync error:', error.message);
-        updateStatus(false);
-        
-        // Show error message
+
         const errorToast = document.getElementById('error-toast');
         const errorMsg = document.getElementById('error-message');
         if (errorMsg && errorToast) {
