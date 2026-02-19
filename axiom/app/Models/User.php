@@ -56,4 +56,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'assigned_to');
     }
+
+    /**
+     * Backwards-compatible alias for assignedTasks()
+     * Some parts of the codebase use $user->tasks — provide that relation.
+     */
+    public function tasks()
+    {
+        return $this->assignedTasks();
+    }
 }

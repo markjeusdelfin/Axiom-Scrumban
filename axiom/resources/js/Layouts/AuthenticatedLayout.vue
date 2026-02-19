@@ -176,6 +176,12 @@ const showingNavigationDropdown = ref(false);
                         >
                             Projects
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('reports.analytics')"
+                            :active="route().current('reports.*')"
+                        >
+                            Reports
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->

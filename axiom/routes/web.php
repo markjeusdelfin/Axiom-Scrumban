@@ -14,11 +14,11 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
-        'tasks' => \App\Models\Task::where('assigned_to', auth()->id())
+        'tasks' => auth()->check() ? \App\Models\Task::where('assigned_to', auth()->id())
             ->whereIn('status', ['not_started', 'in_progress', 'blocked'])
             ->with('project')
             ->orderBy('due_date')
-            ->get()
+            ->get() : []
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -49,6 +49,13 @@ Route::middleware('auth')->group(function () {
     // Reports
     Route::get('/reports/workload', [\App\Http\Controllers\ReportController::class, 'workload'])->name('reports.workload');
     Route::get('/reports/analytics', [\App\Http\Controllers\ReportController::class, 'analytics'])->name('reports.analytics');
+
+    // Dashboard Monitoring
+    Route::get('/dashboard-monitor', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.monitor');
+    Route::get('/dashboard/workload', [\App\Http\Controllers\DashboardController::class, 'workload'])->name('dashboard.workload');
+    Route::get('/dashboard/tasks', [\App\Http\Controllers\DashboardController::class, 'tasks'])->name('dashboard.tasks');
+    Route::get('/api/dashboard/statistics', [\App\Http\Controllers\DashboardController::class, 'getStatics']);
+    Route::get('/api/dashboard/workload', [\App\Http\Controllers\DashboardController::class, 'getWorkloadStatics']);
 
     // Gantt
     Route::get('/projects/{project}/gantt', [\App\Http\Controllers\ProjectController::class, 'gantt'])->name('projects.gantt');
