@@ -25,6 +25,8 @@
     },
     "dependencies": {
         "laravel-echo": "^2.3.0",
+        "lucide-vue-next": "^0.574.0",
+        "puppeteer": "^24.37.3",
         "pusher-js": "^8.4.0",
         "vuedraggable": "^4.1.0"
     }

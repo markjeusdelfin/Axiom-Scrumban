@@ -8,13 +8,19 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-window.Echo = new Echo({
-    broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST ?? '127.0.0.1',
-    wsPort: import.meta.env.VITE_REVERB_PORT ?? 8080,
-    wssPort: import.meta.env.VITE_REVERB_PORT ?? 8080,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https',
-    enabledTransports: ['ws', 'wss'],
-    disableStats: true,
-});
+// Initialize Echo only when a reverb/pusher key is provided
+if (import.meta.env.VITE_REVERB_APP_KEY) {
+    window.Echo = new Echo({
+        broadcaster: 'reverb',
+        key: import.meta.env.VITE_REVERB_APP_KEY,
+        wsHost: import.meta.env.VITE_REVERB_HOST ?? '127.0.0.1',
+        wsPort: import.meta.env.VITE_REVERB_PORT ?? 8080,
+        wssPort: import.meta.env.VITE_REVERB_PORT ?? 8080,
+        forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https',
+        enabledTransports: ['ws', 'wss'],
+        disableStats: true,
+    });
+} else {
+    // No push key configured — disable Echo to avoid runtime errors in browser
+    window.Echo = null;
+}
