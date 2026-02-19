@@ -19,8 +19,7 @@ class DashboardController extends Controller
         private TaskStatisticsService $statisticsService,
         private EmployeeWorkloadService $workloadService,
         private TaskFilteringService $filteringService
-    ) {
-    }
+    ) {}
 
     /**
      * Display main dashboard

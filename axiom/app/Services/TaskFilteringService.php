@@ -11,9 +11,7 @@ use App\Repositories\TaskRepository;
  */
 class TaskFilteringService
 {
-    public function __construct(private TaskRepository $taskRepository)
-    {
-    }
+    public function __construct(private TaskRepository $taskRepository) {}
 
     /**
      * Apply filters to tasks
@@ -176,10 +174,10 @@ class TaskFilteringService
         $ahead = now()->addDays($daysAhead);
 
         $upcoming = $tasks->filter(function ($task) use ($today, $ahead) {
-            return $task->due_date && 
-                   $task->due_date >= $today && 
-                   $task->due_date <= $ahead && 
-                   $task->status !== 'completed';
+            return $task->due_date &&
+                $task->due_date >= $today &&
+                $task->due_date <= $ahead &&
+                $task->status !== 'completed';
         });
 
         return $this->sortTasks($upcoming, 'due_date', 'asc')

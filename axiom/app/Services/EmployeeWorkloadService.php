@@ -13,9 +13,7 @@ use Illuminate\Support\Collection;
  */
 class EmployeeWorkloadService
 {
-    public function __construct(private TaskRepository $taskRepository)
-    {
-    }
+    public function __construct(private TaskRepository $taskRepository) {}
 
     /**
      * Get workload for all employees
@@ -163,7 +161,7 @@ class EmployeeWorkloadService
             $activeTasks = $tasks->filter(function ($task) use ($date) {
                 $createdAt = $this->getDatetime($task->created_at);
                 $completedAt = $task->completed_at ? $this->getDatetime($task->completed_at) : null;
-                
+
                 return $createdAt->format('Y-m-d') <= $date
                     && ($completedAt === null || $completedAt->format('Y-m-d') >= $date);
             });

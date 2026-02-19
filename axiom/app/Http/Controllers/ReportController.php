@@ -47,16 +47,16 @@ class ReportController extends Controller
 
         // Get team members with workload calculation
         $teamMembers = User::whereNotNull('id')
-            ->with(['tasks' => function($q) {
+            ->with(['tasks' => function ($q) {
                 $q->whereIn('status', ['not_started', 'in_progress', 'blocked']);
             }])
             ->get()
-            ->map(function($user) {
+            ->map(function ($user) {
                 $activeTasks = $user->tasks->count();
                 $overdueTasks = $user->tasks->filter(fn($t) => $t->due_date < now())->count();
                 $totalCapacity = 10; // Assume 10 tasks is 100% capacity
                 $workload = min(100, round(($activeTasks / $totalCapacity) * 100));
-                
+
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -76,7 +76,7 @@ class ReportController extends Controller
         $projectsCompletion = Project::withCount([
             'tasks as total_tasks',
             'tasks as completed_tasks' => fn($q) => $q->where('status', 'completed'),
-        ])->get()->map(function($p) {
+        ])->get()->map(function ($p) {
             $total = $p->total_tasks ?? 0;
             $done = $p->completed_tasks ?? 0;
             return [
@@ -89,9 +89,16 @@ class ReportController extends Controller
         });
 
         return inertia('Reports/Analytics', compact(
-            'totalTasks', 'completedTasks', 'overdueTasks',
-            'byStatus', 'byPriority', 'completionRate', 'recentActivity',
-            'teamMembers', 'teamStats', 'projectsCompletion'
+            'totalTasks',
+            'completedTasks',
+            'overdueTasks',
+            'byStatus',
+            'byPriority',
+            'completionRate',
+            'recentActivity',
+            'teamMembers',
+            'teamStats',
+            'projectsCompletion'
         ));
     }
 }

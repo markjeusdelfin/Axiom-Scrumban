@@ -1,19 +1,23 @@
 # Task Monitoring Dashboard - Implementation Guide
 
 ## Overview
+
 This dashboard implementation follows **SOLID Principles** to provide a clean, maintainable, and scalable task monitoring system for Axiom Scrumban.
 
 ## Architecture
 
 ### 1. **Dependency Inversion Principle** ✅
+
 - **Created**: `TaskRepository` (abstraction layer for data access)
 - **Benefit**: Services depend on the repository abstraction, not directly on Models
 - **Files**: `app/Repositories/TaskRepository.php`
 
 ### 2. **Single Responsibility Principle** ✅
+
 Each class has ONE clear responsibility:
 
 #### Backend Services:
+
 - **`TaskStatisticsService`** - Calculates task metrics and statistics only
 - **`EmployeeWorkloadService`** - Manages employee capacity and workload calculations only
 - **`TaskFilteringService`** - Handles filtering and sorting logic only
@@ -21,6 +25,7 @@ Each class has ONE clear responsibility:
 - **`TaskRepository`** - Pure data access layer only
 
 #### Frontend Components:
+
 - **`StatisticsCard.vue`** - Displays a single stat metric
 - **`StatusChart.vue`** - Renders status distribution chart
 - **`PriorityChart.vue`** - Renders priority distribution chart
@@ -33,11 +38,13 @@ Each class has ONE clear responsibility:
 - **`ProgressBar.vue`** - Displays progress percentage only
 
 ### 3. **Composition Over Inheritance** ✅
+
 - Services are composed into `DashboardController` via constructor injection
 - Vue components are composed into pages without inheritance
 - No class hierarchies; pure composition-based design
 
 ### 4. **Separated Modules** ✅
+
 - `Services/` - Business logic
 - `Repositories/` - Data access
 - `Controllers/` - HTTP orchestration
@@ -94,6 +101,7 @@ GET /api/dashboard/workload            → DashboardController::getWorkloadStati
 ## Key Features
 
 ### 📊 Dashboard Overview (Index)
+
 - **Quick Stats**: Total tasks, in progress, overdue, completion rate
 - **Charts**: Task distribution by status and priority
 - **Team Capacity**: Workload summary across team
@@ -101,12 +109,14 @@ GET /api/dashboard/workload            → DashboardController::getWorkloadStati
 - **Upcoming Tasks**: Tasks due in next 7 days
 
 ### 👥 Workload Analysis
+
 - **Employee Details**: Active tasks, overdue, in progress, completed
 - **Workload Meter**: Percentage-based capacity visualization
 - **Bottleneck Detection**: Identifies critical and moderate load situations
 - **Capacity Summary**: Healthy vs. overloaded team members
 
 ### 📋 Task Management
+
 - **Advanced Filters**: By status, priority, assignee, date range
 - **Sorting**: Due date, priority, progress, title, assignee
 - **Status Indicators**: Visual badges for quick identification
@@ -117,6 +127,7 @@ GET /api/dashboard/workload            → DashboardController::getWorkloadStati
 The implementation connects to **PostgreSQL** through Laravel's built-in ORM (Eloquent).
 
 ### Configuration (`.env`):
+
 ```
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
@@ -127,6 +138,7 @@ DB_PASSWORD=your_password
 ```
 
 ### Models Used:
+
 - `Task` - Core task model with relationships
 - `User` - Employee information and relationships
 - `TimeLog` - Time tracking data
@@ -136,6 +148,7 @@ DB_PASSWORD=your_password
 ## Services Documentation
 
 ### TaskStatisticsService
+
 ```php
 $stats = $statisticsService->getTaskStatistics();
 // Returns: total, completed, in_progress, overdue, completion_rate, etc.
@@ -148,6 +161,7 @@ $critical = $statisticsService->getHighPriorityTasks();
 ```
 
 ### EmployeeWorkloadService
+
 ```php
 $workload = $workloadService->getEmployeeWorkloadDetails($employee);
 // Returns: comprehensive workload data for a single employee
@@ -163,6 +177,7 @@ $summary = $workloadService->getCapacitySummary();
 ```
 
 ### TaskFilteringService
+
 ```php
 $filtered = $filteringService->filterTasks([
     'assigned_to' => 1,
@@ -182,17 +197,19 @@ $overdue = $filteringService->getOverdueTasks();
 ## Vue Component Props
 
 ### StatisticsCard
+
 ```vue
-<StatisticsCard 
-  title="Total Tasks"
-  :value="42"
-  subtitle="All tasks in system"
-  icon="📋"
-  color="blue"
+<StatisticsCard
+    title="Total Tasks"
+    :value="42"
+    subtitle="All tasks in system"
+    icon="📋"
+    color="blue"
 />
 ```
 
 ### EmployeeWorkloadRow
+
 ```vue
 <EmployeeWorkloadRow :employee="employeeObject" />
 <!-- Displays workload, capacity, and status for one employee -->
@@ -201,16 +218,19 @@ $overdue = $filteringService->getOverdueTasks();
 ## Usage Example
 
 ### Access Dashboard
+
 1. Navigate to: `http://yourdomain.com/dashboard-monitor`
 2. View quick overview and critical items
 3. Click "View Details →" to access specific pages
 
 ### View Workload Analysis
+
 1. Go to: `http://yourdomain.com/dashboard/workload`
 2. See all employees with capacity indicators
 3. Bottleneck alerts at the top
 
 ### Filter Tasks
+
 1. Go to: `http://yourdomain.com/dashboard/tasks`
 2. Use filter panel to narrow results
 3. Click column headers to sort
@@ -218,6 +238,7 @@ $overdue = $filteringService->getOverdueTasks();
 ## Testing the System
 
 ### Create Test Data
+
 ```bash
 # Seed the database with sample data
 php artisan db:seed --class=TaskSeeder
@@ -225,12 +246,14 @@ php artisan db:seed --class=UserSeeder
 ```
 
 ### Verify Routes
+
 ```bash
 # List all registered routes
 php artisan route:list | grep dashboard
 ```
 
 ### Check Services
+
 ```php
 // Test in tinker
 php artisan tinker
@@ -258,27 +281,30 @@ $stats->getTaskStatistics();
 
 ## SOLID Principles Implementation Summary
 
-| Principle | Implementation |
-|-----------|-----------------|
+| Principle                 | Implementation                                           |
+| ------------------------- | -------------------------------------------------------- |
 | **S**ingle Responsibility | Each class does one thing; services separated by concern |
-| **O**pen/Closed | Services are open for extension, closed for modification |
-| **L**iskov Substitution | Repository can be swapped without breaking services |
-| **I**nterface Segregation | Services accept only needed dependencies |
-| **D**ependency Inversion | All dependencies injected through constructors |
+| **O**pen/Closed           | Services are open for extension, closed for modification |
+| **L**iskov Substitution   | Repository can be swapped without breaking services      |
+| **I**nterface Segregation | Services accept only needed dependencies                 |
+| **D**ependency Inversion  | All dependencies injected through constructors           |
 
 ## Troubleshooting
 
 ### Dashboard shows no data
+
 - Check if tasks exist in database
 - Verify user has correct role
 - Check PostgreSQL connection
 
 ### Charts not rendering
+
 - Ensure Chart.js is installed
 - Check browser console for errors
 - Verify data is being passed correctly
 
 ### Slow performance
+
 - Enable query logging to find N+1 problems
 - Use caching for expensive queries
 - Consider paginating large datasets
@@ -286,6 +312,7 @@ $stats->getTaskStatistics();
 ## Support & Maintenance
 
 For questions or issues:
+
 1. Check the SOLID principles in each class
 2. Review service method documentation
 3. Check Vue component props

@@ -12,9 +12,7 @@ use Illuminate\Support\Collection;
  */
 class TaskStatisticsService
 {
-    public function __construct(private TaskRepository $taskRepository)
-    {
-    }
+    public function __construct(private TaskRepository $taskRepository) {}
 
     /**
      * Get comprehensive task statistics
